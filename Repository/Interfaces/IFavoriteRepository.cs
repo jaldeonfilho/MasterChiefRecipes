@@ -1,8 +1,8 @@
-﻿using Repository.Implementation;
+﻿using Models;
 
 namespace Repository.Interfaces
 {
-    public interface IFavoriteRepository : IGenericRepository<FavoriteRepository>
+    public interface IFavoriteRepository : IGenericRepository<Favorite>
     {
     }
 }

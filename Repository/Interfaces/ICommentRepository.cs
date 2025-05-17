@@ -1,8 +1,8 @@
-﻿using Repository.Implementation;
+﻿using Models;
 
 namespace Repository.Interfaces
 {
-    public interface ICommentRepository : IGenericRepository<CommentRepository>
+    public interface ICommentRepository : IGenericRepository<Comment>
     {
     }
 }

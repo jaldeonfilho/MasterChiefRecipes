@@ -1,9 +1,10 @@
-﻿using Repository.Context;
+﻿using Models;
+using Repository.Context;
 using Repository.Interfaces;
 
 namespace Repository.Implementation
 {
-    public class MeasurementTypeRepository : GenericRepository<MeasurementTypeRepository>, IMeasurementTypeRepository
+    public class MeasurementTypeRepository : GenericRepository<MeasurementType>, IMeasurementTypeRepository
     {
         public MeasurementTypeRepository(DbContextRecipe context)
            : base(context) { }

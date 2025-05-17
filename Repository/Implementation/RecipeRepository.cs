@@ -6,7 +6,7 @@ using Repository.Interfaces;
 
 namespace Repository.Implementation
 {
-    public class RecipeRepository : GenericRepository<RecipeRepository>, IRecipeRepository
+    public class RecipeRepository : GenericRepository<Recipe>, IRecipeRepository
     {
         public RecipeRepository(DbContextRecipe context)
            : base(context) { }
@@ -27,8 +27,5 @@ namespace Repository.Implementation
                                 .Where(r => r.Status == "Pending")
                                 .ToListAsync();
         }
-
-
-
     }
 }

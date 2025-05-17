@@ -1,8 +1,8 @@
-﻿using Repository.Implementation;
+﻿using Models;
 
 
 namespace Repository.Interfaces
 {
-    public interface ICategoryRepository : IGenericRepository<CategoryRepository>
+    public interface ICategoryRepository : IGenericRepository<Category>
     { }
 }

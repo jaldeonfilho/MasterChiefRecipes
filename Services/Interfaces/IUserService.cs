@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Models;
+﻿using Models;
 
 namespace Service.Interfaces
 {
     public interface IUserService
     {
-        void RegisterUser(User user);
-        void UpdateUser(User user);
-        void LockUser(int userId);
-        void UnlockUser(int userId);
-        bool Login(string email, string password);
+        Task<IEnumerable<User>> GetAll();
+        Task<User> GetById(int userId);
+        Task<User> GetUserByEmail(string email);
         string HashPassword(string password);
-        bool VerifyPassword(string password, string storedHash);
-        void ManagePersonalInfo(int userId, string name, string email);
-        User GetUserById(int userId);
-        User GetUserByEmail(string email);
-        IEnumerable<User> GetAllUsers();     
+        Task LockUser(int userId);
+        Task<bool> Login(string email, string password);
+        Task ManagerPersonalInfo(int userId, string name, string email);
         void ManageUserAccess(int userId, string action);
+        Task Register(User newUser);
+        Task UnlockUser(int userId);
+        Task Update(User user);
+        bool VerifyPassword(string password, string storedHash);
     }
 }

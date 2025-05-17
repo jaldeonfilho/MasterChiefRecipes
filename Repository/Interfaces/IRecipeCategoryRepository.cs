@@ -1,8 +1,8 @@
-﻿using Repository.Implementation;
+﻿using Models;
 
 namespace Repository.Interfaces
 {
-    public interface IRecipeCategoryRepository : IGenericRepository<RecipeCategoryRepository>
+    public interface IRecipeCategoryRepository : IGenericRepository<RecipeCategory>
     {
     }
 }

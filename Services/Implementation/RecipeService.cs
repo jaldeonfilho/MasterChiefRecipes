@@ -1,46 +1,29 @@
-﻿using Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Models;
-using Repository.Interfaces;
+﻿using Models;
 using Repository;
+using Repository.Interfaces;
+using Service.Interfaces;
 
 namespace Service.Implementation
 {
-    public class RecipeService : Recipe, IRecipeService
+    public class RecipeService : GenericService<Recipe>, IRecipeService
     {
-        private readonly IRecipeRepository _recipeRepository;
-
-        public RecipeService(IRecipeRepository recipeRepository)
+        private IRecipeRepository _recipeRepository;
+        public RecipeService(IGenericRepository<Recipe> repository, IRecipeRepository recipeRepository)
+            : base(repository)
         {
             _recipeRepository = recipeRepository;
         }
-        public Recipe GetRecipeById(int recipeId)
+
+
+        public async Task ApproveRecipe(int recipeId)
         {
-            return _recipeRepository.GetRecipeById(recipeId);
+            await _recipeRepository.ApproveRecipe(recipeId);
         }
 
-        public void AddRecipe(Recipe recipe)
+        public async Task<IEnumerable<Recipe>> GetPendingRecipes()
         {
-            _recipeRepository.AddRecipe(recipe);
-        }
-
-        public void ApproveRecipe(int recipeId)
-        {
-            _recipeRepository.ApproveRecipe(recipeId);
-        }
-
-        public IEnumerable<Recipe> GetPendingRecipes()
-        {
-            return _recipeRepository.GetPendingRecipes();
-        }
-
-        public IEnumerable<Recipe> GetAllRecipes()
-        {
-            return _recipeRepository.GetAllRecipes();
+            var recipes = await _recipeRepository.GetPendingRecipes();
+            return recipes;
         }
     }
 }

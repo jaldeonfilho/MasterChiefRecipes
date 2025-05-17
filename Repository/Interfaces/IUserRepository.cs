@@ -1,15 +1,13 @@
 ﻿using Models;
-using Repository.Implementation;
 
 
 namespace Repository.Interfaces
 {
-    public interface IUserRepository : IGenericRepository<UserRepository>
+    public interface IUserRepository : IGenericRepository<User>
     {
         Task<User> GetByEmail(string email);
         Task LockUserAsync(int userId);
         Task UnlockUserAsync(int userId);
-        Task ManagePersonalInfoAsync(int userId, string name, string email);
         Task<User> GetByEmailIncluded(string email);
     }
 }

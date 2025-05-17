@@ -1,9 +1,10 @@
-﻿using Repository.Context;
+﻿using Models;
+using Repository.Context;
 using Repository.Interfaces;
 
 namespace Repository.Implementation
 {
-    public class CommentRepository : GenericRepository<CommentRepository>, ICommentRepository
+    public class CommentRepository : GenericRepository<Comment>, ICommentRepository
     {
         public CommentRepository(DbContextRecipe context)
            : base(context) { }

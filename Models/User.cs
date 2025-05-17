@@ -7,7 +7,7 @@
         public string Password { get; set; }
         public bool IsRegisted { get; set; } = false;
         public bool IsAdmin { get; set; } = false;
-        public List<int> Favourites { get; set; }
-        public List<int> Recipes { get; set; }
+        public virtual List<int> Favourites { get; set; }
+        public virtual List<int> Recipes { get; set; }
     }
 }

@@ -1,43 +1,17 @@
-﻿using Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using Service.Interfaces;
 using Models;
-using Repository.Interfaces;
 using Repository;
+using Service.Interfaces;
 
 
 namespace Service.Implementation
 {
-    public class CategoryService : ICategoryService
+    public class CategoryService : GenericService<Category>, ICategoryService
     {
-        private readonly ICategoryRepository _categoryRepository;
-
-        public CategoryService(ICategoryRepository categoryRepository)
+        public CategoryService(IGenericRepository<Category> repository)
+            : base(repository)
         {
-            _categoryRepository = categoryRepository;
         }
 
-        public void AddCategory(Category category)
-        {
-            _categoryRepository.AddCategory(category);
-        }
-
-        public IEnumerable<Category> GetAllCategories()
-        {
-            return _categoryRepository.GetAllCategories();
-        }
-
-        public Category GetCategoryById(int categoryId)
-        {
-            return _categoryRepository.GetCategoryById(categoryId);
-        }
-
-        public void RemoveCategory(int categoryId)
-        {
-            _categoryRepository.RemoveCategory(categoryId);
-        }
     }
 }

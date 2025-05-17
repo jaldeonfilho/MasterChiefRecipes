@@ -1,13 +1,6 @@
-﻿using Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Models;
-using Repository;
+﻿using Models;
 using Repository.Interfaces;
-using BCrypt.Net;
+using Service.Interfaces;
 
 namespace Service.Implementation
 {
@@ -18,10 +11,10 @@ namespace Service.Implementation
         {
             _userRepository = userRepository;
         }
-        public void RegisterUser(User newUser)
+        public async Task Register(User newUser)
         {
             // Verificar se o email já está registrado
-            User existingUser = _userRepository.GetUserByEmail(newUser.Email);
+            User existingUser = await _userRepository.GetByEmail(newUser.Email);
             if (existingUser.Email != null)
             {
                 throw new InvalidOperationException("Email já está em uso.");
@@ -29,12 +22,14 @@ namespace Service.Implementation
 
             newUser.Password = HashPassword(newUser.Password);
             // Adicionar o novo usuário ao repositório
-            _userRepository.RegisterUser(newUser);
+            await _userRepository.AddAsync(newUser);
+            _userRepository.SaveAsync();
+
         }
-        public bool Login(string email, string password)
+        public async Task<bool> Login(string email, string password)
         {
             // Buscar o usuário pelo email
-            User user = _userRepository.GetUserByEmail(email);
+            User user = await _userRepository.GetByEmail(email);
             if (user.Email == null)
             {
                 return false; // Usuário não encontrado
@@ -43,21 +38,23 @@ namespace Service.Implementation
             // Verificar se a senha está correta
             return VerifyPassword(password, user.Password);
         }
-        public void ManagePersonalInfo(int userId, string name, string email)
+        public async Task ManagerPersonalInfo(User user)
         {
             // Buscar o usuário pelo ID
-            User user = _userRepository.GetUserById(userId);
-            if (user == null)
+            User userExist = await _userRepository.GetByIdAsync(user.Id);
+            if (userExist == null)
             {
                 throw new InvalidOperationException("Usuário não encontrado.");
             }
 
             // Atualizar as informações pessoais
-            user.Name = name;
-            user.Email = email;
+            userExist.Name = user.Name;
+            userExist.Email = user.Email;
+            userExist.Password = HashPassword(user.Password);
 
             // Salvar as alterações no repositório
-            _userRepository.UpdateUser(user);
+            _userRepository.Update(userExist);
+            _userRepository.SaveAsync();
         }
         public string HashPassword(string password)
         {
@@ -102,31 +99,32 @@ namespace Service.Implementation
                 throw new InvalidOperationException("Erro ao verificar a senha.", ex);
             }
         }
-        public User GetUserById(int userId)
+        public async Task<User> GetById(int userId)
         {
-            return _userRepository.GetUserById(userId);
+            return await _userRepository.GetByIdAsync(userId);
         }
-        public User GetUserByEmail(string email)
+        public async Task<User> GetUserByEmail(string email)
         {
-            return _userRepository.GetUserByEmail(email);
+            return await _userRepository.GetByEmail(email);
         }
-        public void UpdateUser(User user)
+        public async Task Update(User user)
         {
-            _userRepository.UpdateUser(user);
+            await _userRepository.Update(user);
+            _userRepository.SaveAsync();
         }
-        public IEnumerable<User> GetAllUsers()
+        public async Task<IEnumerable<User>> GetAll()
         {
-            return _userRepository.GetAllUsers();
+            return await _userRepository.GetAllAsync();
         }
 
         //Admin methods
-        public void LockUser(int userId)
+        public async Task LockUser(int userId)
         {
-            _userRepository.LockUser(userId);
+            _userRepository.LockUserAsync(userId);
         }
-        public void UnlockUser(int userId)
+        public async Task UnlockUser(int userId)
         {
-            _userRepository.UnlockUser(userId);
+            _userRepository.UnlockUserAsync(userId);
         }
         public void ManageUserAccess(int userId, string action)
         {
