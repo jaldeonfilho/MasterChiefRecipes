@@ -4,7 +4,7 @@ using Service.Interfaces;
 
 namespace Service.Implementation
 {
-    public class UserService : User, IUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
         public UserService(IUserRepository userRepository)

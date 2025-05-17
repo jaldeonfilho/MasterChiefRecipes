@@ -10,7 +10,7 @@ namespace Service.Interfaces
         string HashPassword(string password);
         Task LockUser(int userId);
         Task<bool> Login(string email, string password);
-        Task ManagerPersonalInfo(int userId, string name, string email);
+        Task ManagerPersonalInfo(User user);
         void ManageUserAccess(int userId, string action);
         Task Register(User newUser);
         Task UnlockUser(int userId);
