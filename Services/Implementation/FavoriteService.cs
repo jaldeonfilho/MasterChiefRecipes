@@ -4,9 +4,9 @@ using Service.Interfaces;
 
 namespace Service.Implementation
 {
-    public class FavoriteService : GenericService<Favorite>, IFavoriteService
+    public class FavoriteService : GenericService<FavoriteDto>, IFavoriteService
     {
-        public FavoriteService(IGenericRepository<Favorite> repository)
+        public FavoriteService(IGenericRepository<FavoriteDto> repository)
             : base(repository)
         {
         }

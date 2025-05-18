@@ -4,9 +4,9 @@ using Service.Interfaces;
 
 namespace Service.Implementation
 {
-    public class RecipeIngredientService : GenericService<RecipeIngredient>, IRecipeIngredientService
+    public class RecipeIngredientService : GenericService<RecipeIngredientDto>, IRecipeIngredientService
     {
-        public RecipeIngredientService(IGenericRepository<RecipeIngredient> repository)
+        public RecipeIngredientService(IGenericRepository<RecipeIngredientDto> repository)
             : base(repository)
         {
         }

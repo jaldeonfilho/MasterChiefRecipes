@@ -1,4 +1,6 @@
-﻿using Models;
+﻿using Microsoft.Extensions.Logging;
+using Models;
+using Models.Mappers;
 using Repository.Interfaces;
 using Service.Interfaces;
 
@@ -7,54 +9,83 @@ namespace Service.Implementation
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        private readonly ILogger<UserService> _logger;
+
+        public UserService(IUserRepository userRepository, ILogger<UserService> logger)
         {
-            _userRepository = userRepository;
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
         }
-        public async Task Register(User newUser)
+        public async Task<UserDto> AddAsync(UserDto userDto)
         {
             // Verificar se o email já está registrado
-            User existingUser = await _userRepository.GetByEmail(newUser.Email);
+            User existingUser = await _userRepository.GetByEmail(userDto.Email);
             if (existingUser.Email != null)
             {
                 throw new InvalidOperationException("Email já está em uso.");
             }
 
-            newUser.Password = HashPassword(newUser.Password);
-            // Adicionar o novo usuário ao repositório
-            await _userRepository.AddAsync(newUser);
-            _userRepository.SaveAsync();
+            try
+            {
+                var entity = UserMapper.ToEntity(userDto);
+                entity.Password = HashPassword(entity.Password);
+                var entitySaved = await _userRepository.AddAsync(entity);
+                await _userRepository.SaveAsync();
 
+                return UserMapper.ToDto(entitySaved);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocorreu um erro ao registrar novo usuário");
+                throw;
+            }
         }
         public async Task<bool> Login(string email, string password)
         {
-            // Buscar o usuário pelo email
-            User user = await _userRepository.GetByEmail(email);
-            if (user.Email == null)
+            try
             {
-                return false; // Usuário não encontrado
+                User user = await _userRepository.GetByEmail(email);
+                if (user.Email == null)
+                {
+                    return false; // Usuário não encontrado
+                }
+
+                // Verificar se a senha está correta
+                return VerifyPassword(password, user.Password);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocorreu um erro ao validar dados do usuário");
+                throw;
             }
 
-            // Verificar se a senha está correta
-            return VerifyPassword(password, user.Password);
         }
-        public async Task ManagerPersonalInfo(User user)
+        public async Task<UserDto> Update(UserDto user)
         {
-            // Buscar o usuário pelo ID
-            User userExist = await _userRepository.GetByIdAsync(user.Id);
-            if (userExist == null)
+            try
             {
-                throw new InvalidOperationException("Usuário não encontrado.");
+                // Buscar o usuário pelo ID
+                User userExist = await _userRepository.GetByIdAsync(user.Id);
+                if (userExist == null)
+                {
+                    throw new InvalidOperationException("Usuário não encontrado.");
+                }
+                // Atualizar as informações pessoais
+                var entity = UserMapper.ToEntity(user);
+                entity.Password = HashPassword(entity.Password);
+
+                // Salvar as alterações no repositório
+                var entitySaved = await _userRepository.Update(entity);
+                await _userRepository.SaveAsync();
+                return UserMapper.ToDto(entitySaved);
             }
-
-            // Atualizar as informações pessoais
-            userExist.Name = user.Name;
-            userExist.Email = user.Email;
-            userExist.Password = HashPassword(user.Password);
-
-            // Salvar as alterações no repositório
-            _userRepository.Update(userExist);
-            _userRepository.SaveAsync();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocorreu um erro ao atualizar dados do usuário");
+                throw;
+            }
         }
         public string HashPassword(string password)
         {
@@ -99,22 +130,44 @@ namespace Service.Implementation
                 throw new InvalidOperationException("Erro ao verificar a senha.", ex);
             }
         }
-        public async Task<User> GetById(int userId)
+        public async Task<UserDto> GetById(int userId)
         {
-            return await _userRepository.GetByIdAsync(userId);
+            try
+            {
+                var entity = await _userRepository.GetByIdAsync(userId);
+                return UserMapper.ToDto(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Usuário não encontrado.");
+                throw;
+            }
         }
-        public async Task<User> GetUserByEmail(string email)
+        public async Task<UserDto> GetUserByEmail(string email)
         {
-            return await _userRepository.GetByEmail(email);
+            try
+            {
+                var entity = await _userRepository.GetByEmail(email);
+                return UserMapper.ToDto(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Usuário não encontrado.");
+                throw;
+            }
         }
-        public async Task Update(User user)
+        public async Task<IEnumerable<UserDto>> GetAll()
         {
-            await _userRepository.Update(user);
-            _userRepository.SaveAsync();
-        }
-        public async Task<IEnumerable<User>> GetAll()
-        {
-            return await _userRepository.GetAllAsync();
+            try
+            {
+                var entity = await _userRepository.GetAllAsync();
+                return UserMapper.ToDtos(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lista de usuário não encontrada.");
+                throw;
+            }
         }
 
         //Admin methods

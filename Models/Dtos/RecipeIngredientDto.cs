@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class RecipeIngredient : BaseModel
+    public class RecipeIngredientDto : BaseModel
     {
         public int Amount { get; set; }
         public int MeasurementTypeId { get; set; }

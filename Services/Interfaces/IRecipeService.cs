@@ -2,9 +2,9 @@
 
 namespace Service.Interfaces
 {
-    public interface IRecipeService
+    public interface IRecipeService : IGenericService<RecipeDto>
     {
         Task ApproveRecipe(int recipeId);
-        Task<IEnumerable<Recipe>> GetPendingRecipes();
+        Task<IEnumerable<RecipeDto>> GetPendingRecipes();
     }
 }

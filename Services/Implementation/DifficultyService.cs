@@ -5,9 +5,9 @@ using Service.Interfaces;
 
 namespace Service.Implementation
 {
-    public class DifficultyService : GenericService<Difficulty>, IDifficultyService
+    public class DifficultyService : GenericService<DifficultyDto>, IDifficultyService
     {
-        public DifficultyService(IGenericRepository<Difficulty> repository)
+        public DifficultyService(IGenericRepository<DifficultyDto> repository)
             : base(repository)
         {
         }

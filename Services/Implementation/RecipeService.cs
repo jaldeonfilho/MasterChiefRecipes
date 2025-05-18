@@ -5,10 +5,10 @@ using Service.Interfaces;
 
 namespace Service.Implementation
 {
-    public class RecipeService : GenericService<Recipe>, IRecipeService
+    public class RecipeService : GenericService<RecipeDto>, IRecipeService
     {
         private IRecipeRepository _recipeRepository;
-        public RecipeService(IGenericRepository<Recipe> repository, IRecipeRepository recipeRepository)
+        public RecipeService(IGenericRepository<RecipeDto> repository, IRecipeRepository recipeRepository)
             : base(repository)
         {
             _recipeRepository = recipeRepository;
@@ -20,7 +20,7 @@ namespace Service.Implementation
             await _recipeRepository.ApproveRecipe(recipeId);
         }
 
-        public async Task<IEnumerable<Recipe>> GetPendingRecipes()
+        public async Task<IEnumerable<RecipeDto>> GetPendingRecipes()
         {
             var recipes = await _recipeRepository.GetPendingRecipes();
             return recipes;

@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class RecipeCategory : BaseModel
+    public class RecipeCategoryDto : BaseModel
     {
         public int CategoryId { get; set; }
         public CategoryDto Category { get; set; }

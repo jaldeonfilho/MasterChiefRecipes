@@ -6,9 +6,9 @@ using Service.Interfaces;
 
 namespace Service.Implementation
 {
-    public class CategoryService : GenericService<Category>, ICategoryService
+    public class CategoryService : GenericService<CategoryDto>, ICategoryService
     {
-        public CategoryService(IGenericRepository<Category> repository)
+        public CategoryService(IGenericRepository<CategoryDto> repository)
             : base(repository)
         {
         }

@@ -4,9 +4,9 @@ using Service.Interfaces;
 
 namespace Service.Implementation
 {
-    public class MeasurementTypeService : GenericService<MeasurementType>, IMeasurementTypeService
+    public class MeasurementTypeService : GenericService<MeasurementTypeDto>, IMeasurementTypeService
     {
-        public MeasurementTypeService(IGenericRepository<MeasurementType> repository)
+        public MeasurementTypeService(IGenericRepository<MeasurementTypeDto> repository)
             : base(repository)
         {
         }

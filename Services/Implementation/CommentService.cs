@@ -4,9 +4,9 @@ using Service.Interfaces;
 
 namespace Service.Implementation
 {
-    public class CommentService : GenericService<Comment>, ICommentService
+    public class CommentService : GenericService<CommentDto>, ICommentService
     {
-        public CommentService(IGenericRepository<Comment> repository)
+        public CommentService(IGenericRepository<CommentDto> repository)
             : base(repository)
         {
         }
