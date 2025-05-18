@@ -29,8 +29,8 @@ namespace Service.Implementation
 
             try
             {
-                var entity = UserMapper.ToEntity(userDto);
-                entity.Password = HashPassword(entity.Password);
+                var entity = UserMapper.ToEntityAdd(userDto);
+                entity.Password = HashPassword(userDto.Password);
                 var entitySaved = await _userRepository.AddAsync(entity);
                 await _userRepository.SaveAsync();
 
@@ -63,24 +63,24 @@ namespace Service.Implementation
             }
 
         }
-        public async Task<UserDto> Update(UserDto user)
+        public async Task<UserDto> Update(UserDto userDto)
         {
             try
             {
                 // Buscar o usuário pelo ID
-                User userExist = await _userRepository.GetByIdAsync(user.Id);
-                if (userExist == null)
+                User entity = await _userRepository.GetByIdAsync(userDto.Id);
+                if (entity == null)
                 {
                     throw new InvalidOperationException("Usuário não encontrado.");
                 }
                 // Atualizar as informações pessoais
-                var entity = UserMapper.ToEntity(user);
-                entity.Password = HashPassword(entity.Password);
+                entity = UserMapper.ToEntityUpdate(userDto, entity);
+                //entity.Password = HashPassword(userDto.Password);
 
                 // Salvar as alterações no repositório
-                var entitySaved = await _userRepository.Update(entity);
+                var entityUpdate = await _userRepository.Update(entity);
                 await _userRepository.SaveAsync();
-                return UserMapper.ToDto(entitySaved);
+                return UserMapper.ToDto(entityUpdate);
             }
             catch (Exception ex)
             {
@@ -88,7 +88,7 @@ namespace Service.Implementation
                 throw;
             }
         }
-        public string HashPassword(string password)
+        private string HashPassword(string password)
         {
             // Verifica se a senha não é nula ou vazia
             if (string.IsNullOrWhiteSpace(password))
@@ -107,7 +107,7 @@ namespace Service.Implementation
                 throw new InvalidOperationException("Erro ao gerar hash da senha.", ex);
             }
         }
-        public bool VerifyPassword(string password, string storedHash)
+        private bool VerifyPassword(string password, string storedHash)
         {
             // Verifica se a senha não é nula ou vazia
             if (string.IsNullOrWhiteSpace(password))

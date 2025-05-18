@@ -18,10 +18,10 @@ namespace Models.Mappers
                 IsAdmin = entity.IsAdmin,
                 IsAtive = entity.IsAtive,
                 IsRegisted = entity.IsRegisted,
-                Password = entity.Password,
                 Recipes = entity.Recipes,
             };
         }
+
         public static IEnumerable<UserDto> ToDtos(IEnumerable<User> entities)
         {
             if (entities == null)
@@ -29,23 +29,37 @@ namespace Models.Mappers
 
             return entities.Select(e => ToDto(e));
         }
-        public static User ToEntity(UserDto viewModel)
+
+        public static User ToEntityAdd(UserDto entityDto)
         {
-            if (viewModel == null)
+            if (entityDto == null)
                 return null;
 
             return new User
             {
-                Id = viewModel.Id,
-                Name = viewModel.Name,
-                Email = viewModel.Email,
-                Favourites = viewModel.Favourites,
-                IsAdmin = viewModel.IsAdmin,
-                IsAtive = viewModel.IsAtive,
-                IsRegisted = viewModel.IsRegisted,
-                Password = viewModel.Password,
-                Recipes = viewModel.Recipes,
+                Name = entityDto.Name,
+                Email = entityDto.Email,
+                Favourites = entityDto.Favourites,
+                IsAdmin = entityDto.IsAdmin,
+                IsAtive = entityDto.IsAtive,
+                IsRegisted = entityDto.IsRegisted,
+                Recipes = entityDto.Recipes,
             };
+        }
+
+        public static User ToEntityUpdate(UserDto entityDto, User entity)
+        {
+            if (entityDto == null)
+                return null;
+
+            entity.Name = entityDto.Name;
+            entity.Email = entityDto.Email;
+            entity.Favourites = entityDto.Favourites;
+            entity.IsAdmin = entityDto.IsAdmin;
+            entity.IsAtive = entityDto.IsAtive;
+            entity.IsRegisted = entityDto.IsRegisted;
+            entity.Recipes = entityDto.Recipes;
+            return entity;
         }
     }
 }

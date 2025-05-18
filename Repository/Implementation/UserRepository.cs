@@ -13,7 +13,7 @@ namespace Repository.Implementation
            : base(context)
         {
         }
-        public async Task LockUserAsync(int userId)
+        public async Task LockUserAsync(int userId/*, bool stats*/) // Mudar para o Update.
         {
             var user = await _context.FindAsync<User>(userId);
             if (user != null)
