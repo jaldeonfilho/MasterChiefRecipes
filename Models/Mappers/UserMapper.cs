@@ -1,4 +1,6 @@
-﻿namespace Models.Mappers
+﻿using Models.Entities;
+
+namespace Models.Mappers
 {
     public static class UserMapper
     {

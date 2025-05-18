@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Models;
+using Models.Entities;
 using Models.Mappers;
 using Repository.Interfaces;
 using Service.Interfaces;

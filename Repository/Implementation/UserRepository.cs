@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Models;
+using Models.Entities;
 using Repository.Context;
 using Repository.Interfaces;
 
