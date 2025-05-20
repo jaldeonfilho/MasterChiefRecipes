@@ -1,9 +1,9 @@
-﻿using Repository.Implementation;
+﻿using Models.Entities;
 
 
 namespace Repository.Interfaces
 {
-    public interface IDifficultyRepository : IGenericRepository<DifficultyRepository>
+    public interface IDifficultyRepository : IGenericRepository<Difficulty>
     {
     }
 }

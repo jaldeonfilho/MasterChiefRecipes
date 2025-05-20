@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Models;
-
+﻿using Models;
 
 namespace Service.Interfaces
 {
     public interface IIngredientService
     {
-        void AddIngredient(Ingredient ingredient);
-        IEnumerable<Ingredient> GetAllIngredients();
-        Ingredient GetIngredientById(int ingredientId);
-        void RemoveIngredient(int ingredientId);
+        Task<IngredientDto> AddAsync(IngredientDto entityDto);
+        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<IngredientDto>> GetAll();
+        Task<IngredientDto> GetById(int entityId);
+        Task<IngredientDto> Update(IngredientDto entityDto);
     }
 }

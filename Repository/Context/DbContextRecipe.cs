@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Entities;
 
 namespace Repository.Context
 {
@@ -20,7 +21,7 @@ namespace Repository.Context
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<RecipeCategory> RecipeCategories { get; set; }
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserDto> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

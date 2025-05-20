@@ -1,6 +1,8 @@
-﻿namespace Models
+﻿using Models.Entities;
+
+namespace Models
 {
-    public class Favorite : BaseModel
+    public class FavoriteDto : BaseModel
     {
         public int UserId { get; set; }
         public int RecipeId { get; set; }

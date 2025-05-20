@@ -1,8 +1,8 @@
-﻿using Repository.Implementation;
+﻿using Models.Entities;
 
 namespace Repository.Interfaces
 {
-    public interface IMeasurementTypeRepository : IGenericRepository<MeasurementTypeRepository>
+    public interface IMeasurementTypeRepository : IGenericRepository<MeasurementType>
     {
     }
 }

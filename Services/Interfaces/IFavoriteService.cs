@@ -1,18 +1,13 @@
 ﻿using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Interfaces
 {
     public interface IFavoriteService
     {
-        void AddFavorite(Favorite favorite);
-        public Favorite GetFavoriteById(int id);
-        public Favorite GetFavorite(int userId, int recipeId);
-        IEnumerable<Favorite> GetAllFavorites();
-        void RemoveFavorite(int id);
+        Task<FavoriteDto> AddAsync(FavoriteDto entityDto);
+        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<FavoriteDto>> GetAll();
+        Task<FavoriteDto> GetById(int entityId);
+        Task<FavoriteDto> Update(FavoriteDto entityDto);
     }
 }

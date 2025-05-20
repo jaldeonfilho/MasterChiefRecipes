@@ -1,10 +1,11 @@
-﻿using Repository.Context;
+﻿using Models.Entities;
+using Repository.Context;
 using Repository.Interfaces;
 
 
 namespace Repository.Implementation
 {
-    public class IngredientRepository : GenericRepository<IngredientRepository>, IIngredientRepository
+    public class IngredientRepository : GenericRepository<Ingredient>, IIngredientRepository
     {
         public IngredientRepository(DbContextRecipe context)
            : base(context) { }

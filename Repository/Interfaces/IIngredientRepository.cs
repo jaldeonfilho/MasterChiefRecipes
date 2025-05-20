@@ -1,9 +1,9 @@
-﻿using Repository.Implementation;
+﻿using Models.Entities;
 
 
 namespace Repository.Interfaces
 {
-    public interface IIngredientRepository : IGenericRepository<IngredientRepository>
+    public interface IIngredientRepository : IGenericRepository<Ingredient>
     {
     }
 }

@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Models;
-
+﻿using Models;
 
 namespace Service.Interfaces
 {
     public interface ICategoryService
     {
-        void AddCategory(Category category);
-        Category GetCategoryById(int categoryId);
-        IEnumerable<Category> GetAllCategories();
-        void RemoveCategory(int categoryId);
+        Task<CategoryDto> AddAsync(CategoryDto entityDto);
+        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<CategoryDto>> GetAll();
+        Task<CategoryDto> GetById(int entityId);
+        Task<CategoryDto> Update(CategoryDto entityDto);
     }
 }

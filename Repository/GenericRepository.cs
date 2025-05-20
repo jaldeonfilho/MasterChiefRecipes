@@ -24,9 +24,10 @@ namespace Repository
             return await _dbSet.ToListAsync();
         }
 
-        public async Task AddAsync(T entity)
+        public async Task<T> AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
+            return entity;
         }
 
         public async Task AddListAsync(List<T> listEntity)
@@ -34,16 +35,16 @@ namespace Repository
             foreach (var entity in listEntity)
             {
                 await _dbSet.AddAsync(entity);
-
             }
         }
 
-        public void Update(T entity)
+        public async Task<T> Update(T entity)
         {
             _dbSet.Update(entity);
+            return entity;
         }
 
-        public void Delete(T entity)
+        public async Task Delete(T entity)
         {
             _dbSet.Remove(entity);
         }

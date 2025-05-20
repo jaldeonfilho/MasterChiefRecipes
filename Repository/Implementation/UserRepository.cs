@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Models;
+using Models.Entities;
 using Repository.Context;
 using Repository.Interfaces;
 
@@ -7,13 +7,13 @@ using Repository.Interfaces;
 
 namespace Repository.Implementation
 {
-    public class UserRepository : GenericRepository<UserRepository>, IUserRepository
+    public class UserRepository : GenericRepository<User>, IUserRepository
     {
         public UserRepository(DbContextRecipe context)
            : base(context)
         {
         }
-        public async Task LockUserAsync(int userId)
+        public async Task LockUserAsync(int userId/*, bool stats*/) // Mudar para o Update.
         {
             var user = await _context.FindAsync<User>(userId);
             if (user != null)
@@ -28,16 +28,6 @@ namespace Repository.Implementation
             if (user != null)
             {
                 user.IsRegisted = true;
-                await _context.SaveChangesAsync();
-            }
-        }
-        public async Task ManagePersonalInfoAsync(int userId, string name, string email)
-        {
-            var user = await _context.FindAsync<User>(userId);
-            if (user != null)
-            {
-                user.Name = name;
-                user.Email = email;
                 await _context.SaveChangesAsync();
             }
         }

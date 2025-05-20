@@ -1,6 +1,8 @@
-﻿namespace Models
+﻿using Models.Entities;
+
+namespace Models
 {
-    public class Recipe : BaseModel
+    public class RecipeDto : BaseModel
     {
         public string Title { get; set; }
         public string Description { get; set; }
@@ -8,10 +10,9 @@
         public int CategoryId { get; set; }
         public int DifficultyId { get; set; }
         public int UserId { get; set; }
-        public string Status { get; set; } = "pending";
-        public Category Category { get; set; }
-        public Difficulty Difficulty { get; set; }
-        public User User { get; set; }
+        public CategoryDto Category { get; set; }
+        public DifficultyDto Difficulty { get; set; }
+        public UserDto User { get; set; }
 
     }
 }

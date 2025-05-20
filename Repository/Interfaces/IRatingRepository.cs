@@ -1,8 +1,8 @@
-﻿using Repository.Implementation;
+﻿using Models.Entities;
 
 namespace Repository.Interfaces
 {
-    public interface IRatingRepository : IGenericRepository<RatingRepository>
+    public interface IRatingRepository : IGenericRepository<Rating>
     {
     }
 }

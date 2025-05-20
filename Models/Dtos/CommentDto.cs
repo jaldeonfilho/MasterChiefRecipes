@@ -1,6 +1,8 @@
-﻿namespace Models
+﻿using Models.Entities;
+
+namespace Models
 {
-    public class Comment : BaseModel
+    public class CommentDto : BaseModel
     {
         public string Comments { get; set; }
         public int UsertId { get; set; }

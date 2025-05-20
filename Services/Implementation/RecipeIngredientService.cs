@@ -1,46 +1,111 @@
-﻿using Models;
+﻿using Microsoft.Extensions.Logging;
+using Models;
+using Models.Entities;
+using Models.Mappers;
 using Repository.Interfaces;
 using Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Implementation
 {
     public class RecipeIngredientService : IRecipeIngredientService
     {
         private readonly IRecipeIngredientRepository _recipeIngredientRepository;
-
-        public RecipeIngredientService(IRecipeIngredientRepository recipeIngredientRepository)
+        private readonly ILogger<RecipeIngredientService> _logger;
+        public RecipeIngredientService(IRecipeIngredientRepository recipeIngredientRepository, ILogger<RecipeIngredientService> logger)
         {
-            _recipeIngredientRepository = recipeIngredientRepository;
+            _recipeIngredientRepository = recipeIngredientRepository ?? throw new ArgumentNullException(nameof(recipeIngredientRepository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+        public async Task<RecipeIngredientDto> AddAsync(RecipeIngredientDto recipeIngredientDto)
+        {
+            try
+            {
+                var entity = RecipeIngredientMapper.ToEntityAdd(recipeIngredientDto);
+                var entitySaved = await _recipeIngredientRepository.AddAsync(entity);
+                await _recipeIngredientRepository.SaveAsync();
+
+                return RecipeIngredientMapper.ToDto(entitySaved);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocorreu um erro ao registrar novo ingrediente de receita");
+                throw;
+            }
+        }
+        public async Task<RecipeIngredientDto> Update(RecipeIngredientDto entityDto)
+        {
+            try
+            {
+                // Buscar o RecipeIngredient pelo ID
+                RecipeIngredient entity = await _recipeIngredientRepository.GetByIdAsync(entityDto.Id);
+                if (entity == null)
+                {
+                    throw new InvalidOperationException("Ingrediente da receita não encontrado.");
+                }
+                // Atualizar as informações
+                entity = RecipeIngredientMapper.ToEntityUpdate(entityDto, entity);
+
+                // Salvar as alterações no repositório
+                var entityUpdated = await _recipeIngredientRepository.Update(entity);
+                await _recipeIngredientRepository.SaveAsync();
+                return RecipeIngredientMapper.ToDto(entityUpdated);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocorreu um erro ao atualizar dados.");
+                throw;
+            }
         }
 
-        public void AddRecipeIngredient(RecipeIngredient recipeIngredient)
+        public async Task<RecipeIngredientDto> GetById(int recipeIngredientId)
         {
-            _recipeIngredientRepository.AddRecipeIngredient(recipeIngredient);
+            try
+            {
+                var entity = await _recipeIngredientRepository.GetByIdAsync(recipeIngredientId);
+                return RecipeIngredientMapper.ToDto(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ingrediente de receita não encontrado.");
+                throw;
+            }
         }
 
-        public RecipeIngredient GetRecipeIngredientById(int recipeIngredientId)
+        public async Task<IEnumerable<RecipeIngredientDto>> GetAll()
         {
-            return _recipeIngredientRepository.GetRecipeIngredientById(recipeIngredientId);
+            try
+            {
+                var entity = await _recipeIngredientRepository.GetAllAsync();
+                return RecipeIngredientMapper.ToDtos(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lista de Ingrediente de receita não encontrada.");
+                throw;
+            }
+        }
+        public async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                var entity = await _recipeIngredientRepository.GetByIdAsync(id);
+                if (entity == null)
+                {
+                    return false;
+                }
+
+                _recipeIngredientRepository.Delete(entity);
+                await _recipeIngredientRepository.SaveAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocorreu um erro ao tentar deletar ingrediente de receita com ID {{ID}}", id);
+                throw;
+            }
         }
 
-        public IEnumerable<RecipeIngredient> GetAllRecipeIngredients()
-        {
-            return _recipeIngredientRepository.GetAllRecipeIngredients();
-        }
-
-        public void UpdateRecipeIngredient(RecipeIngredient recipeIngredient)
-        {
-            _recipeIngredientRepository.UpdateRecipeIngredient(recipeIngredient);
-        }
-
-        public void RemoveRecipeIngredient(int recipeIngredientId)
-        {
-            _recipeIngredientRepository.RemoveRecipeIngredient(recipeIngredientId);
-        }
     }
 }

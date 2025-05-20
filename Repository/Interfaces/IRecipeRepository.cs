@@ -1,12 +1,11 @@
-﻿using Models;
-using Repository.Implementation;
+﻿using Models.Entities;
 
 
 namespace Repository.Interfaces
 {
-    public interface IRecipeRepository : IGenericRepository<RecipeRepository>
+    public interface IRecipeRepository : IGenericRepository<Recipe>
     {
-        Task ApproveRecipe(int recipeId);
+        //Task ApproveRecipe(int recipeId);
         Task<IEnumerable<Recipe>> GetPendingRecipes();
     }
 }
